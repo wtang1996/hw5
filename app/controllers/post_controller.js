@@ -4,15 +4,16 @@ import Post from '../models/post_model';
 // and we purposefully don't return content here either
 const cleanPosts = (posts) => {
   return posts.map(post => {
-    return { id: post._id, title: post.title, tags: post.tags };
+    return { id: post._id, title: post.title, tags: post.tags.toString() };
   });
 };
 
 export const createPost = (req, res) => {
   const post = new Post();
   post.title = req.body.title;
-  post.tags = req.body.tags;
+  post.tags = req.body.tags.split(' ');
   post.content = req.body.content;
+  post.comments = [];
   post.save()
   .then(result => {
     res.json({ message: 'Post created!' });
@@ -35,7 +36,7 @@ export const getPosts = (req, res) => {
 export const getPost = (req, res) => {
   Post.findById(req.params.id)
   .then(post => {
-    res.json({ title: post.title, tags: post.tags, content: post.content });
+    res.json({ title: post.title, tags: post.tags.join(), content: post.content, comments: post.comments });
   })
   .catch(error => {
     res.json({ error });
@@ -68,7 +69,7 @@ export const updatePost = (req, res) => {
   }
   if (req.body.tags !== '') {
     Post.find().where({ _id: req.params.id })
-    .update({ tags: req.body.tags })
+    .update({ tags: req.body.tags.split(' ') })
     .catch(error => {
       res.json({ error });
     });
@@ -80,9 +81,16 @@ export const updatePost = (req, res) => {
       res.json({ error });
     });
   }
+  if (req.body.comments !== []) {
+    Post.find().where({ _id: req.params.id })
+    .update({ comments: req.body.comments })
+    .catch(error => {
+      res.json({ error });
+    });
+  }
   Post.findById(req.params.id)
   .then(post => {
-    res.json(post);
+    res.json({ id: post._id, title: post.title, tags: post.tags.toString(), content: post.content, comments: post.comments });
   })
   .catch(error => {
     res.json({ error });
