@@ -1,9 +1,5 @@
-# starter express app template
+# Extra credit
 
-* node with babel
-* expressjs
-* airbnb eslint rules
-
-Procfile set up to run on [heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs#deploy-the-app)
-
+* store tags in an array
+* add the commenting feature to blog posts
 
