@@ -92,7 +92,7 @@ export const updatePost = (req, res) => {
 
   Post.findById(req.params.id)
   .then(post => {
-    res.json({ id: post._id, title: post.title, tags: post.tags.toString(), content: post.content, comments: post.comments });
+    res.json({ id: post._id, title: post.title, tags: post.tags.toString(), content: post.content, comments: post.comments, author: post.authorName });
   })
   .catch(error => {
     res.json({ error });
