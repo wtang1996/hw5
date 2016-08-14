@@ -6,6 +6,7 @@ const PostSchema = new Schema({
   tags: [String],
   content: String,
   comments: [String],
+  authorName: String,
 });
 
 // create model class
